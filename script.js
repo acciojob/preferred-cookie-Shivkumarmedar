@@ -1,53 +1,48 @@
-//your JS code here. If required.
- function setCookie(name, value, days) {
-            const expirationDate = new Date();
-            expirationDate.setTime(expirationDate.getTime() + (days * 24 * 60 * 60 * 1000));
-            document.cookie = `${name}=${value};expires=${expirationDate.toUTCString()};path=/`;
-        }
+function setCookie(name, value, days) {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()}`;
+  }
 
-        // Function to get a cookie by name
-        function getCookie(name) {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.startsWith(name + '=')) {
-                    return cookie.substring(name.length + 1);
-                }
-            }
-            return null;
-        }
+  // Function to get cookies
+  function getCookie(name) {
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+      const [cookieName, cookieValue] = cookie.trim().split('=');
+      if (cookieName === name) {
+        return decodeURIComponent(cookieValue);
+      }
+    }
+    return null;
+  }
 
-        // Apply user preferences stored in cookies
-        function applyUserPreferences() {
-            const fontSize = getCookie('fontSize');
-            const fontColor = getCookie('fontColor');
+  // Apply user preferences
+  function applyPreferences() {
+    const fontSize = getCookie('font-size');
+    const fontColor = getCookie('font-color');
+    if (fontSize) {
+      document.body.style.fontSize = `${fontSize}px`;
+    }
+    if (fontColor) {
+      document.body.style.color = fontColor;
+    }
+  }
 
-            if (fontSize) {
-                document.body.style.fontSize = fontSize + 'px';
-            }
-            if (fontColor) {
-                document.body.style.color = fontColor;
-            }
-        }
+  // Event listener for form submission
+  document.getElementById('preferences-form').addEventListener('submit', function(event) {
+    event.preventDefault();
 
-        // Event listener for the "Apply Styles" button
-        const applyStylesButton = document.getElementById('apply-styles');
-        applyStylesButton.addEventListener('click', function(event) {
-            event.preventDefault();
+    const fontSizeInput = document.getElementById('font-size');
+    const fontColorInput = document.getElementById('font-color');
 
-            const fontSizeInput = document.getElementById('font-size');
-            const fontColorInput = document.getElementById('font-color');
+    const selectedFontSize = fontSizeInput.value;
+    const selectedFontColor = fontColorInput.value;
 
-            const fontSize = fontSizeInput.value;
-            const fontColor = fontColorInput.value;
+    setCookie('font-size', selectedFontSize, 30); // Store cookie for 30 days
+    setCookie('font-color', selectedFontColor, 30);
 
-            // Store user preferences in cookies
-            setCookie('fontSize', fontSize, 365);
-            setCookie('fontColor', fontColor, 365);
+    applyPreferences();
+  });
 
-            // Apply styles
-            applyUserPreferences();
-        });
-
-        // Apply user preferences when the page loads
-        applyUserPreferences();
+  // Apply preferences on page load
+  window.addEventListener('load', applyPreferences);

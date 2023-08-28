@@ -7,22 +7,16 @@
 
   <body>
     <!-- the entire body must be written by student -->
-    <form>
-      <label for="fontsize">Font Size:</label>
-      <input
-        type="number"
-        id="fontsize"
-        name="fontsize"
-        min="8"
-        max="72"
-        value="16"
-      />
-      <br />
-      <label for="fontcolor">Font Color:</label>
-      <input type="color" id="fontcolor" name="fontcolor" value="#000000" />
-      <br />
-      <input type="submit" value="Save" />
-    </form>
+<!--     <h1>Customize Your Preferences</h1> -->
+<form id="preferences-form">
+  <label for="font-size">Font Size:</label>
+  <input type="number" id="font-size" name="font-size" min="12" max="48" step="1">
+  <br>
+  <label for="font-color">Font Color:</label>
+  <input type="color" id="font-color" name="font-color">
+  <br>
+  <button type="submit">Apply Preferences</button>
+</form>
 
     <script type="text/javascript" src="./script.js"></script>
   </body>
